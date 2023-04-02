@@ -1,3 +1,9 @@
+# custom
+config.py
+cred.json
+namesforreddit.json
+playground.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
