@@ -3,6 +3,7 @@ config.py
 cred.json
 namesforreddit.json
 playground.py
+settings.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
