@@ -16,7 +16,7 @@ def start(update, context):
     context.bot.send_message(chat_id=update.message.chat_id,
                              text="Hello , Thanks for choosing us!!")
 
-    context.job_queue.run_repeating(callback_minute, interval=240, first=10,
+    context.job_queue.run_repeating(callback_minute, interval=120, first=10,
                                     context=update.message.chat_id)
 
 
