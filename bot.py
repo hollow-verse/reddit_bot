@@ -25,7 +25,7 @@ def tele_send_text(posts, context, chat_id):
         msg = f"""
             Subreddit : {post.get('subreddit','Null')} \n
             Title : {post.get('title','Null')} \n
-            Time : {post.get('utc_datetime_str','Null')} \n
+            Posted Ago : {post.get('posted_ago','Null')} hours \n
             Url : {post.get('url','Null')} \n
             Text : {post.get('selftext','Null')}
             """
@@ -41,7 +41,6 @@ def callback_minute(context):
 
 
 def main():
-    utils.intialize_app()
     updater = Updater(token, use_context=True)
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", start, pass_job_queue=True))
