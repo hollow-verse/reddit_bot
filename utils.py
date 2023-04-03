@@ -1,8 +1,8 @@
+import pytz
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 from datetime import datetime as dt
-from dateutil import tz
 import urllib.request
 import config
 import pymongo
@@ -80,18 +80,25 @@ def get_start_end_timestamp():
     return int(start_time), int(end_time)
 
 
-def get_posted_ago_in_local_time(utc_time):
-    local_zone = tz.tzlocal()
+def time_passed_since_utc_str(utc_str):
+    # parse the string as a datetime object
+    utc_dt = dt.strptime(utc_str, '%Y-%m-%d %H:%M:%S')
 
-    utc_date_time = dt.strptime(utc_time, '%Y-%m-%d %H:%M:%S')
-    utc_date_time = utc_date_time.replace(tzinfo=local_zone)
+    # convert to IST timezone
+    ist_tz = pytz.timezone('Asia/Kolkata')
+    ist_dt = pytz.utc.localize(utc_dt).astimezone(ist_tz)
 
-    local_time = utc_date_time.astimezone(local_zone)
-    current_time = dt.now(local_zone)
+    # calculate minutes passed since that time
+    now_dt = dt.now(ist_tz)
+    total_seconds_passed = (now_dt - ist_dt).total_seconds()
+    minutes_passed = total_seconds_passed / 60
 
-    diff = current_time - local_time
-
-    return (diff.seconds/60)//60
+    # convert to hours if more than 60 minutes have passed
+    if minutes_passed >= 60:
+        hours_passed = minutes_passed / 60
+        return f'{hours_passed:.2f} hours have passed since {ist_dt} UTC'
+    else:
+        return f'{minutes_passed:.2f} minutes have passed since {ist_dt} UTC'
 
 
 def get_filtered_posts_with_firebase(url, sub_name):
@@ -108,7 +115,7 @@ def get_filtered_posts_with_firebase(url, sub_name):
             continue
         else:
             if post['utc_datetime_str']:
-                posted_ago = get_posted_ago_in_local_time(
+                posted_ago = time_passed_since_utc_str(
                     post['utc_datetime_str'])
                 post['posted_ago'] = posted_ago
             insert_ids_firestore(ref, post['id'])
@@ -127,6 +134,7 @@ def get_filtered_posts_with_mongo(url, sub_name, client):
     for post in posts:
         # id = post['id']
         id_exist = check_post_id_mongo(post['id'], col)
+        # id_exist = False
         if id_exist:
             continue
         else:
@@ -134,7 +142,7 @@ def get_filtered_posts_with_mongo(url, sub_name, client):
                 posted_ago = get_posted_ago_in_local_time(
                     post['utc_datetime_str'])
                 post['posted_ago'] = posted_ago
-            insert_mongo_collection(post['id'],col)
+            insert_mongo_collection(post['id'], col)
             filtered_posts.append(post)
     return filtered_posts
 
@@ -143,17 +151,19 @@ def get_all_posts():
     client = create_mongo_client()
     st_time, end_tim = get_start_end_timestamp()
 
-    url_1 = f"https://api.pushshift.io/reddit/search/submission?&subreddit=india&since={st_time}&until={end_tim}&sort=created_utc&order=desc&agg_size=25&shard_size=1.5&track_total_hits=false&limit=100&filter=subreddit%2Cselftext%2Ctitle%2Cid%2Curl%2Cutc_datetime_str"
+    india = f"https://api.pushshift.io/reddit/search/submission?subreddit=india&since={st_time}&until={end_tim}&sort=created_utc&order=desc&agg_size=25&shard_size=1.5&track_total_hits=false&limit=100&filter=subreddit%2Cselftext%2Ctitle%2Cid%2Curl%2Cutc_datetime_str"
 
-    url_2 = f"https://api.pushshift.io/reddit/search/submission?&subreddit=askreddit&since={st_time}&until={end_tim}&sort=created_utc&order=desc&agg_size=100&shard_size=1.5&track_total_hits=false&limit=100&filter=subreddit%2Cselftext%2Ctitle%2Cid%2Curl%2Cutc_datetime_st"
+    askreddit = f"https://api.pushshift.io/reddit/search/submission?subreddit=askreddit&since={st_time}&until={end_tim}&sort=created_utc&order=desc&agg_size=100&shard_size=1.5&track_total_hits=false&limit=100&filter=subreddit%2Cselftext%2Ctitle%2Cid%2Curl%2Cutc_datetime_str"
+
     filtered_posts = []
     filtered_posts.append(get_filtered_posts_with_mongo(
-        url_1, 'india', client))
-    filtered_posts.append(get_filtered_posts_with_mongo(
-        url_2, 'askreddit', client))
+        india, 'india', client))
+    filtered_posts.append(
+        get_filtered_posts_with_mongo(askreddit, 'askreddit', client))
     return filtered_posts
 
 
 if __name__ == '__main__':
+    s = get_all_posts()
     # quic delete
     pass
