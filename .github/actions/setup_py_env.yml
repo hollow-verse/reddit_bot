@@ -1,0 +1,42 @@
+name: Dependency Management
+description: Checks cached dependencies and installs dependencies through poetry if needed
+inputs:
+  system-requirements:
+    description: 'System requirements to install before installing python dependencies'
+    required: false
+    default: ''
+  python-version:
+    description: 'Python version to use'
+    required: false
+    default: '3.11.5'
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+    - name: Provide OS-level requirements
+      shell: bash
+      run: sudo apt-get update && sudo apt-get install -y ${{ inputs.system-requirements }}
+    - name: Install poetry
+      uses: snok/install-poetry@v1
+      with:
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+        installer-parallel: true
+    - name: Setup python
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ inputs.python-version }}
+        cache: 'poetry'
+    - name: Load installed dependencies from cache
+      id: cached-poetry-dependencies
+      uses: actions/cache@v2
+      with:
+        path: .venv
+        key: poetry-${GITHUB_REF##*/}-${{ hashFiles('**/poetry.lock') }}
+    - name: Install dependencies if no cache found
+      if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+      run: |
+        poetry config --local virtualenvs.in-project true
+        poetry install
+      shell: bash
