@@ -22,4 +22,4 @@ jobs:
     - name: Linting check
       run: |
         echo "Checking linting against $(poetry run black --version)"
-        poetry run my-telegram-bot
+        poetry run python3 bot.py
