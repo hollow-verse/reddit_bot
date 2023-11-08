@@ -13,14 +13,13 @@ jobs:
     runs-on: ubuntu-latest
 
     # These steps are run in the same order as are defined.
-    steps:
-      # actions checkout and python are pre-built actions
-      # that abstract commonly used tasks.
-      - uses: actions/checkout@v2
+    steps:  
+    - uses: actions/checkout@v3
 
-      # The python action will set us a Python 3.8 (64-bit) instance.
-      - name: Setting up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.8"
-          architecture: "x64"
+    - name: Set up Environment
+      uses: ./.github/actions/setup_py_env
+
+    - name: Linting check
+      run: |
+        echo "Checking linting against $(poetry run black --version)"
+        poetry run my-telegram-bot
