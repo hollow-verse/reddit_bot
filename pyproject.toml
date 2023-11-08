@@ -22,6 +22,3 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 
-[tool.poetry.scripts]
-my-telegram-bot = "bot:main"
-
