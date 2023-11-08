@@ -3,16 +3,15 @@ name: Discord Webhook
 # 'on' is the trigger, in this case this Action will
 # be triggered using cron set at a 10 minutes interval.
 on:
-  workflow_dispatch:
+  schedule:
+    - cron: */10 * * * *
 
 # 'jobs' are the routines, we only have
 # one when the instance is built.
 jobs:
   build:
-    # Our instance will use the latest available version of Ubuntu.
     runs-on: ubuntu-latest
 
-    # These steps are run in the same order as are defined.
     steps:  
     - uses: actions/checkout@v3
 
@@ -21,5 +20,5 @@ jobs:
 
     - name: Linting check
       run: |
-        echo "Checking linting against $(poetry run black --version)"
+        echo "Sending messsages to Telegram...."
         poetry run python3 bot.py
