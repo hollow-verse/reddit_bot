@@ -93,7 +93,7 @@ def get_filtered_posts_with_praw(sub_name, reddit_client,mongo_client):
                 post_dict["selftext"] = post.selftext
                 post_dict["subreddit"] = sub_name
 
-                # insert_mongo_collection(post_dict["id"], mongo_collection)
+                insert_mongo_collection(post_dict["id"], mongo_collection)
                 filtered_posts.append(post_dict)
         else:
             continue
