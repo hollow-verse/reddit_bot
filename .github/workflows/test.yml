@@ -1,0 +1,22 @@
+name: Send Telegram Messages
+
+# 'on' is the trigger, in this case this Action will
+# be triggered using cron set at a 10 minutes interval.
+on:
+  push:
+    branches:
+      - main
+  # workflow_dispatch:
+# 'jobs' are the routines, we only have
+# one when the instance is built.
+jobs:
+  build:
+    runs-on: ubuntu-latest    
+
+    steps:  
+    - uses: actions/checkout@v3
+    - name: Print GitHub Secret
+      run: echo "The value of MONGO_USER is $MONGO_USER"
+    
+    - name: Print env var
+      run: echo $TEST_ENV_VAR
