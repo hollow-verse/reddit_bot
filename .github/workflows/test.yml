@@ -1,22 +1,27 @@
-name: Running Tests
+name: Send Telegram Messages
 
+# 'on' is the trigger, in this case this Action will
+# be triggered using cron set at a 10 minutes interval.
 on:
-#   push:
-#     branches:
-#       - main
-    workflow_dispatch:
-
+  push:
+    branches:
+      - main
+  # workflow_dispatch:
+# 'jobs' are the routines, we only have
+# one when the instance is built.
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+        VALID_FLAIR_TEXT: ${{vars.VALID_FLAIR_TEXT}}
 
     steps:  
     - uses: actions/checkout@v3
 
-    - name: Print GitHub Token
-      run: |
-        echo "The value of GITHUB_TOKEN is: $GITHUB_TOKEN"
+    - name: Set up Environment
+      uses: ./.github/actions/setup_py_env
 
-    - name: Print Test Environment Variable
+    - name: Linting check
       run: |
-        echo "The value of TEST_ENV_VAR is: ${{ vars.TEST_ENV_VAR }}"
+        echo "Sending messsages to Telegram...."
+        poetry run python3 lib/test.py

@@ -28,15 +28,15 @@ runs:
       with:
         python-version: ${{ inputs.python-version }}
         cache: 'poetry'
-    - name: Load installed dependencies from cache
-      id: cached-poetry-dependencies
-      uses: actions/cache@v2
-      with:
-        path: .venv
-        key: poetry-${GITHUB_REF##*/}-${{ hashFiles('**/poetry.lock') }}
-    - name: Install dependencies if no cache found
-      if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-      run: |
-        poetry config --local virtualenvs.in-project true
-        poetry install
-      shell: bash
+    # - name: Load installed dependencies from cache
+    #   id: cached-poetry-dependencies
+    #   uses: actions/cache@v2
+    #   with:
+    #     path: .venv
+    #     key: poetry-${GITHUB_REF##*/}-${{ hashFiles('**/poetry.lock') }}
+    # - name: Install dependencies if no cache found
+    #   if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+    #   run: |
+    #     poetry config --local virtualenvs.in-project true
+    #     poetry install
+    #   shell: bash

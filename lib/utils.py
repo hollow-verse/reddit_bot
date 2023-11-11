@@ -87,7 +87,7 @@ def get_filtered_posts_with_praw(sub_name, reddit_client,mongo_client):
                 post_dict["selftext"] = post.selftext
                 post_dict["subreddit"] = sub_name
 
-                # insert_mongo_collection(post_dict["id"], mongo_collection)
+                insert_mongo_collection(post_dict["id"], mongo_collection)
                 filtered_posts.append(post_dict)
         else:
             continue
@@ -106,11 +106,4 @@ def get_all_posts():
 
 
 if __name__ == "__main__":
-    s = get_all_posts()
-    print(s)
-    # reddit = get_reddit_client()
-    # # st_time, end_tim = get_start_end_timestamp()
-    # forhire = reddit.subreddit('Jobs4Bitcoins')
-    # for post in forhire.new(limit=20):
-    #     print(post.url)
-    #     print(post.link_flair_text)
+    filtered_post = get_all_posts()
