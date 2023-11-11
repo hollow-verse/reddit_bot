@@ -18,8 +18,8 @@ jobs:
     - name: Print GitHub Secret
       run: echo "The value of MONGO_USER is $MONGO_USER"
 
-    # - name: Set up Environment
-    #   uses: ./.github/actions/setup_py_env
+    - name: Set up Environment
+      uses: ./.github/actions/setup_py_env
 
     - name: Linting check
       run: |
