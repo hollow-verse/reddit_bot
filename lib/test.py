@@ -13,7 +13,9 @@ TELEGRAM_CHAT_ID =  os.environ.get('TELEGRAM_CHAT_ID')
 def main():
     # Initialize the Telegram Bot
     bot = Bot(token=TELEGRAM_TOKEN)
-    bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=f"test {sub_names} dsadsa")
+    sub_names = sub_names.split(',')
+    for sub_name in sub_names:
+        bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=f"test {sub_name} dsadsa")
 
 
 if __name__ == "__main__":
