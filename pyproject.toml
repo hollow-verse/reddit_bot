@@ -13,5 +13,3 @@ python = "^3.8"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-
-export SUB_NAMES='forhite,slae'
