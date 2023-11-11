@@ -27,8 +27,6 @@ jobs:
 
     steps:  
     - uses: actions/checkout@v3
-    - name: Print GitHub Secret
-      run: echo "The value of MONGO_USER is $MONGO_USER"
 
     - name: Set up Environment
       uses: ./.github/actions/setup_py_env
