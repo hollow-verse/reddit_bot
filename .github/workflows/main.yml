@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      MONGO_USER: ${{ secrets.MONGO_USER }}
+      MONGO_USER: ${{ secrets.MANGO_USER }}
     
 
     steps:  
