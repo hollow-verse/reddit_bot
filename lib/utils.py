@@ -90,7 +90,7 @@ def get_filtered_posts_with_praw(sub_name, reddit_client,mongo_client):
                 post_dict["selftext"] = post.selftext
                 post_dict["subreddit"] = sub_name
 
-                insert_mongo_collection(post_dict["id"], mongo_collection)
+                # insert_mongo_collection(post_dict["id"], mongo_collection)
                 filtered_posts.append(post_dict)
         else:
             continue
@@ -101,9 +101,9 @@ def get_all_posts():
     reddit_client = get_reddit_client()
     mongo_client = create_mongo_client()
     filtered_posts = []
-    sub_names = os.getenv('SUB_NAMES', '[]')
-    print(sub_names)
+    sub_names = os.getenv('SUB_NAMES', '[]').split(',')
     for i in range(len(sub_names)):
+        print(sub_names[i])
         filtered_posts.append(get_filtered_posts_with_praw(sub_names[i],reddit_client,mongo_client))
     return filtered_posts
 
