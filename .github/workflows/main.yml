@@ -13,16 +13,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      MONGO_USER: ${{ secrets.MONGO_USER }}
-      SUB_NAMES: ${{ secrets.SUB_NAMES }}
-      MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
-      MONGO_URI: ${{ secrets.MONGO_URI }}
+      MONGO_USER: ${{ vars.MONGO_USER }}
+      SUB_NAMES: ${{ vars.SUB_NAMES }}
+      MONGO_PASSWORD: ${{ vars.MONGO_PASSWORD }}
+      MONGO_URI: ${{ vars.MONGO_URI }}
       MONGO_DB_NAME: ${{ vars.MONGO_DB_NAME }}
-      REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
-      REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
-      REDDIT_USER_AGENT: ${{ secrets.REDDIT_USER_AGENT }}
-      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+      REDDIT_CLIENT_ID: ${{ vars.REDDIT_CLIENT_ID }}
+      REDDIT_CLIENT_SECRET: ${{ vars.REDDIT_CLIENT_SECRET }}
+      REDDIT_USER_AGENT: ${{ vars.REDDIT_USER_AGENT }}
+      TELEGRAM_CHAT_ID: ${{ vars.TELEGRAM_CHAT_ID }}
+      TELEGRAM_TOKEN: ${{ vars.TELEGRAM_TOKEN }}
 
     
 
