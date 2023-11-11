@@ -14,6 +14,8 @@ def main():
     # Initialize the Telegram Bot
     print(sub_names)
     print(VALID_FLIAR_TEXT)
+    if 'Task' in VALID_FLIAR_TEXT:
+        print('fuck_me')
    
 
 if __name__ == "__main__":
