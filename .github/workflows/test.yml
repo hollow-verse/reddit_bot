@@ -1,14 +1,9 @@
-name: TEst
+name: Test Workflow
 
-# 'on' is the trigger, in this case this Action will
-# be triggered using cron set at a 10 minutes interval.
 on:
   push:
     branches:
       - main
-  # workflow_dispatch:
-# 'jobs' are the routines, we only have
-# one when the instance is built.
 jobs:
     build:
       runs-on: ubuntu-latest
@@ -24,7 +19,6 @@ jobs:
         TELEGRAM_CHAT_ID: ${{ vars.TELEGRAM_CHAT_ID }}
         TELEGRAM_TOKEN: ${{ vars.TELEGRAM_TOKEN }}
         VALID_FLAIRS: ${{ vars.VALID_FLAIRS }}
-  
   
       steps:  
       - uses: actions/checkout@v3

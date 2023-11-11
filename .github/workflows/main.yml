@@ -1,16 +1,13 @@
-name: TEst
+name: Extract Reddit Posts and Send to Telegram
 
-# 'on' is the trigger, in this case this Action will
-# be triggered using cron set at a 10 minutes interval.
 on:
-  push:
-    branches:
-      - main
-  # workflow_dispatch:
-# 'jobs' are the routines, we only have
-# one when the instance is built.
+   schedule:
+     - cron: "*/15 * * * *"
+#   push:
+#     branches:
+#       - main
 jobs:
-    build:
+    Send-message-to-telegram:
       runs-on: ubuntu-latest
       env:
         MONGO_USER: ${{ vars.MONGO_USER }}
