@@ -13,7 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      MONGO_USER: ${{ secrets.MONGO_DB_NAME }}
+      MONGO_USER: ${{ secrets.MONGO_USER }}
       SUB_NAMES: ${{ secrets.SUB_NAMES }}
       MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
       MONGO_URI: ${{ secrets.MONGO_URI }}
