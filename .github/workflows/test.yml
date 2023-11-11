@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-env:
-    TEST_ENV_VAR: "dsadas"
 
 jobs:
   build:
@@ -20,4 +18,4 @@ jobs:
 
     - name: Print Test Environment Variable
       run: |
-        echo "The value of TEST_ENV_VAR is: $TEST_ENV_VAR"
+        echo "The value of TEST_ENV_VAR is: ${{ env.TEST_ENV_VAR }}"
