@@ -9,6 +9,7 @@ TELEGRAM_CHAT_ID =  os.environ.get('TELEGRAM_CHAT_ID')
 
 def main():
     # Initialize the Telegram Bot
+    print(TELEGRAM_TOKEN)
     bot = Bot(token=TELEGRAM_TOKEN)
 
     # Get filtered subreddit posts
