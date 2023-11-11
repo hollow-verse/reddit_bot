@@ -21,7 +21,7 @@ jobs:
     # - name: Set up Environment
     #   uses: ./.github/actions/setup_py_env
 
-    # - name: Linting check
-    #   run: |
-    #     echo "Sending messsages to Telegram...."
-    #     poetry run python3 bot.py
+    - name: Linting check
+      run: |
+        echo "Sending messsages to Telegram...."
+        poetry run python3 test.py
