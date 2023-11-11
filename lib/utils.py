@@ -68,11 +68,12 @@ def calculate_time_difference(utc_timestamp):
 
 
 def get_filtered_posts_with_praw(sub_name, reddit_client,mongo_client):
+    VALID_FLAIRS = os.getenv('VALID_FLAIRS', '[]').split(',')
     subreddit_client = reddit_client.subreddit(sub_name)
     mongo_collection = mongo_client[sub_name]
     filtered_posts = []
     for post in subreddit_client.new(limit=20):
-        if (post.link_flair_text == "Hiring" or post.link_flair_text == "Hiring - Open" or post.link_flair_text == "Task"):
+        if post.link_flair_text in VALID_FLAIRS:
             post_dict = {}
             post_dict["id"] = post.id
             id_exist = check_post_id_mongo(post_dict["id"], mongo_collection)
@@ -87,7 +88,7 @@ def get_filtered_posts_with_praw(sub_name, reddit_client,mongo_client):
                 post_dict["selftext"] = post.selftext
                 post_dict["subreddit"] = sub_name
 
-                insert_mongo_collection(post_dict["id"], mongo_collection)
+                # insert_mongo_collection(post_dict["id"], mongo_collection)
                 filtered_posts.append(post_dict)
         else:
             continue
@@ -100,7 +101,6 @@ def get_all_posts():
     filtered_posts = []
     sub_names = os.getenv('SUB_NAMES', '[]').split(',')
     for i in range(len(sub_names)):
-        print(sub_names[i])
         filtered_posts.append(get_filtered_posts_with_praw(sub_names[i],reddit_client,mongo_client))
     return filtered_posts
 

@@ -1,11 +1,11 @@
 name: Extract Reddit Posts and Send to Telegram
 
 on:
-   schedule:
-     - cron: "*/15 * * * *"
-#   push:
-#     branches:
-#       - main
+#    schedule:
+#      - cron: "*/15 * * * *"
+  push:
+    branches:
+      - main
 jobs:
     Send-message-to-telegram:
       runs-on: ubuntu-latest
