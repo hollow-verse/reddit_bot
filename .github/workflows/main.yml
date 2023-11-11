@@ -27,4 +27,5 @@ jobs:
     - name: Linting check
       run: |
         echo "Sending messsages to Telegram...."
+        export $(xargs <.prod.env)
         poetry run python3 lib/test.py

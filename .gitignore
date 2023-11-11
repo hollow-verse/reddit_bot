@@ -3,7 +3,7 @@ cred.json
 namesforreddit.json
 playground.py
 settings.json
-.prod.env
+# .prod.env
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
