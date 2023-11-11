@@ -24,6 +24,8 @@ def create_mongo_client():
     mongo_db = os.environ.get("MONGO_DB_NAME")
     srv = f"mongodb+srv://{mongo_user}:{mongo_pass}@{mongo_uri}/?retryWrites=true&w=majority"
     client = pymongo.MongoClient(srv)
+    print(mongo_db)
+    print(type(mongo_db))
     return client[mongo_db]
 
 
