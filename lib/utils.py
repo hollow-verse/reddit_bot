@@ -101,13 +101,10 @@ def get_all_posts():
     reddit_client = get_reddit_client()
     mongo_client = create_mongo_client()
     filtered_posts = []
-    os.getenv('SUB_NAMES', '[]')
+    sub_names = os.getenv('SUB_NAMES', '[]')
     print(sub_names)
-
-    # filtered_posts.append(get_filtered_posts_with_praw("forhire",reddit_client,mongo_client))
-    # filtered_posts.append(get_filtered_posts_with_praw("slavelabour",reddit_client,mongo_client))
-    # filtered_posts.append(get_filtered_posts_with_praw("Jobs4Bitcoins",reddit_client,mongo_client))
-
+    for i in range(len(sub_names)):
+        filtered_posts.append(get_filtered_posts_with_praw(sub_names[i],reddit_client,mongo_client))
     return filtered_posts
 
 
