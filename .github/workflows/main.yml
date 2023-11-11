@@ -27,4 +27,4 @@ jobs:
     - name: Linting check
       run: |
         echo "Sending messsages to Telegram...."
-        poetry run python3 test.py
+        poetry run python3 lib/test.py
