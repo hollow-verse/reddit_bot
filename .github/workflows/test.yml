@@ -23,6 +23,7 @@ jobs:
         REDDIT_USER_AGENT: ${{ vars.REDDIT_USER_AGENT }}
         TELEGRAM_CHAT_ID: ${{ vars.TELEGRAM_CHAT_ID }}
         TELEGRAM_TOKEN: ${{ vars.TELEGRAM_TOKEN }}
+        VALID_FLAIR_TEXT: ${{ vars.VALID_FLAIR_TEXT }}
   
   
       steps:  
