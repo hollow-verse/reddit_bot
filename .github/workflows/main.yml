@@ -13,8 +13,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      MONGO_USER: ${{ secrets.MANGO_USER }}
+      MONGO_USER: ${{ secrets.MONGO_DB_NAME }}
       SUB_NAMES: ${{ secrets.SUB_NAMES }}
+      MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
+      MONGO_URI: ${{ secrets.MONGO_URI }}
+      REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+      REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
+      REDDIT_USER_AGENT: ${{ secrets.REDDIT_USER_AGENT }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+
     
 
     steps:  
@@ -28,5 +36,4 @@ jobs:
     - name: Linting check
       run: |
         echo "Sending messsages to Telegram...."
-        export $(xargs <.prod.env)
         poetry run python3 lib/test.py
