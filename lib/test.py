@@ -9,7 +9,7 @@ TELEGRAM_CHAT_ID =  os.environ.get('TELEGRAM_CHAT_ID')
 
 
 def main():
-    VALID_FLIAR_TEXT = os.environ.get('TEST_ENV_VAR').split(',')
+    VALID_FLIAR_TEXT = os.environ.get('VALID_FLAIRS').split(',')
     sub_names = os.getenv('SUB_NAMES', '[]').split(',')
     # Initialize the Telegram Bot
     print(sub_names)
