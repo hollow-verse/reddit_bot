@@ -5,7 +5,7 @@ on:
     branches:
       - main
 env:
-    TEST_ENV_VAR: ""
+    TEST_ENV_VAR: "dsadas"
 
 jobs:
   build:
