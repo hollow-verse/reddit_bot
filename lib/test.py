@@ -103,7 +103,7 @@ def get_all_posts():
     for i in range(len(sub_names)):
         print(sub_names[i])
         filtered_posts.append(get_filtered_posts_with_praw(sub_names[i],reddit_client,mongo_client))
-        print(filtered_post)
+        print(filtered_posts)
     return filtered_posts
 
 
