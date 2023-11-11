@@ -4,20 +4,24 @@ name: Send Telegram Messages
 # be triggered using cron set at a 10 minutes interval.
 on:
   workflow_dispatch:
-
 # 'jobs' are the routines, we only have
 # one when the instance is built.
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      MONGO_USER: ${{ secrets.MONGO_USER }}
+    
 
     steps:  
     - uses: actions/checkout@v3
+    - name: Print GitHub Secret
+      run: echo "The value of MONGO_USER is $MONGO_USER"
 
-    - name: Set up Environment
-      uses: ./.github/actions/setup_py_env
+    # - name: Set up Environment
+    #   uses: ./.github/actions/setup_py_env
 
-    - name: Linting check
-      run: |
-        echo "Sending messsages to Telegram...."
-        poetry run python3 bot.py
+    # - name: Linting check
+    #   run: |
+    #     echo "Sending messsages to Telegram...."
+    #     poetry run python3 bot.py
