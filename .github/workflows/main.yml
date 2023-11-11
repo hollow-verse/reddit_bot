@@ -1,0 +1,36 @@
+name: Extract Reddit Posts and Send to Telegram
+
+on:
+   schedule:
+     - cron: "*/15 * * * *"
+  # push:
+  #   branches:
+  #     - main
+jobs:
+    Send-message-to-telegram:
+      runs-on: ubuntu-latest
+      env:
+        MONGO_USER: ${{ vars.MONGO_USER }}
+        SUB_NAMES: ${{ vars.SUB_NAMES }}
+        MONGO_PASSWORD: ${{ vars.MONGO_PASSWORD }}
+        MONGO_URI: ${{ vars.MONGO_URI }}
+        MONGO_DB_NAME: ${{ vars.MONGO_DB_NAME }}
+        REDDIT_CLIENT_ID: ${{ vars.REDDIT_CLIENT_ID }}
+        REDDIT_CLIENT_SECRET: ${{ vars.REDDIT_CLIENT_SECRET }}
+        REDDIT_USER_AGENT: ${{ vars.REDDIT_USER_AGENT }}
+        TELEGRAM_CHAT_ID: ${{ vars.TELEGRAM_CHAT_ID }}
+        TELEGRAM_TOKEN: ${{ vars.TELEGRAM_TOKEN }}
+        VALID_FLAIRS: ${{ vars.VALID_FLAIRS }}
+  
+  
+      steps:  
+      - uses: actions/checkout@v3
+  
+      - name: Set up Environment
+        uses: ./.github/actions/setup_py_env
+  
+      - name: Linting check
+        run: |
+          echo "Sending messsages to Telegram...."
+          poetry run python3 lib/bot.py
+  
