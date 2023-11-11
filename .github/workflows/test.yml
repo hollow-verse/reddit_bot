@@ -1,4 +1,4 @@
-name: Send Telegram Messages
+name: TEst
 
 # 'on' is the trigger, in this case this Action will
 # be triggered using cron set at a 10 minutes interval.
@@ -10,19 +10,29 @@ on:
 # 'jobs' are the routines, we only have
 # one when the instance is built.
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    env:
-        VALID_FLAIR_TEXT: ${{vars.VALID_FLAIR_TEXT}}
-        
-
-    steps:  
-    - uses: actions/checkout@v3
-
-    - name: Set up Environment
-      uses: ./.github/actions/setup_py_env
-
-    - name: Linting check
-      run: |
-        echo "Sending messsages to Telegram...."
-        poetry run python3 lib/test.py
+    build:
+      runs-on: ubuntu-latest
+      env:
+        MONGO_USER: ${{ vars.MONGO_USER }}
+        SUB_NAMES: ${{ vars.SUB_NAMES }}
+        MONGO_PASSWORD: ${{ vars.MONGO_PASSWORD }}
+        MONGO_URI: ${{ vars.MONGO_URI }}
+        MONGO_DB_NAME: ${{ vars.MONGO_DB_NAME }}
+        REDDIT_CLIENT_ID: ${{ vars.REDDIT_CLIENT_ID }}
+        REDDIT_CLIENT_SECRET: ${{ vars.REDDIT_CLIENT_SECRET }}
+        REDDIT_USER_AGENT: ${{ vars.REDDIT_USER_AGENT }}
+        TELEGRAM_CHAT_ID: ${{ vars.TELEGRAM_CHAT_ID }}
+        TELEGRAM_TOKEN: ${{ vars.TELEGRAM_TOKEN }}
+  
+  
+      steps:  
+      - uses: actions/checkout@v3
+  
+      - name: Set up Environment
+        uses: ./.github/actions/setup_py_env
+  
+      - name: Linting check
+        run: |
+          echo "Sending messsages to Telegram...."
+          poetry run python3 lib/test.py
+  
