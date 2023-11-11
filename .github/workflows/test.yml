@@ -1,4 +1,4 @@
-name: Send Telegram Messages
+name: Running Tests
 
 on:
 #   push:
