@@ -6,7 +6,11 @@ authors = ["laraib_sidd <laraib.sidd7@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "3.11.5"
+python-telegram-bot = "^21.1.1"
+pytz = "^2024.1"
+pymongo = "^4.7.0"
+praw = "^7.7.1"
 
 
 [build-system]
