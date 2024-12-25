@@ -1,37 +1,48 @@
 name: Extract Reddit Posts and Send to Discord
 
 on:
-   workflow_dispatch:
-   schedule:
-     - cron: "*/15 * * * *"
-  # push:
-  #   branches:
-  #     - main
+  workflow_dispatch:
+  schedule:
+    - cron: "*/15 * * * *"
+
 jobs:
-    Send-message-to-telegram:
-      runs-on: ubuntu-latest
-      env:
-        MONGO_USER: ${{ vars.MONGO_USER }}
-        SUB_NAMES: ${{ vars.SUB_NAMES }}
-        MONGO_PASSWORD: ${{ vars.MONGO_PASSWORD }}
-        MONGO_URI: ${{ vars.MONGO_URI }}
-        MONGO_DB_NAME: ${{ vars.MONGO_DB_NAME }}
-        REDDIT_CLIENT_ID: ${{ vars.REDDIT_CLIENT_ID }}
-        REDDIT_CLIENT_SECRET: ${{ vars.REDDIT_CLIENT_SECRET }}
-        REDDIT_USER_AGENT: ${{ vars.REDDIT_USER_AGENT }}
-        TELEGRAM_CHAT_ID: ${{ vars.TELEGRAM_CHAT_ID }}
-        TELEGRAM_TOKEN: ${{ vars.TELEGRAM_TOKEN }}
-        VALID_FLAIRS: ${{ vars.VALID_FLAIRS }}
-        DISCORD_WEBHOOK_URL: ${{ vars.DISCORD_WEBHOOK_URL }}
-  
-      steps:  
+  setup-and-lint:
+    runs-on: ubuntu-latest
+    steps:
       - uses: actions/checkout@v3
-  
+      
       - name: Set up Environment
         uses: ./.github/actions/setup_py_env
-  
-      - name: Linting check
-        run: |
-          echo "Sending messsages to Telegram...."
-          poetry run python3 lib/discord_bot.py
-  
+        with:
+          python-version: '3.11.8'
+      
+      - name: Run linting
+        run: poetry run flake8 lib/
+
+  run-bot:
+    needs: setup-and-lint
+    runs-on: ubuntu-latest
+    env:
+      MONGO_USER: ${{ vars.MONGO_USER }}
+      SUB_NAMES: ${{ vars.SUB_NAMES }}
+      MONGO_PASSWORD: ${{ vars.MONGO_PASSWORD }}
+      MONGO_URI: ${{ vars.MONGO_URI }}
+      MONGO_DB_NAME: ${{ vars.MONGO_DB_NAME }}
+      REDDIT_CLIENT_ID: ${{ vars.REDDIT_CLIENT_ID }}
+      REDDIT_CLIENT_SECRET: ${{ vars.REDDIT_CLIENT_SECRET }}
+      REDDIT_USER_AGENT: ${{ vars.REDDIT_USER_AGENT }}
+      TELEGRAM_CHAT_ID: ${{ vars.TELEGRAM_CHAT_ID }}
+      TELEGRAM_TOKEN: ${{ vars.TELEGRAM_TOKEN }}
+      VALID_FLAIRS: ${{ vars.VALID_FLAIRS }}
+      DISCORD_WEBHOOK_URL: ${{ vars.DISCORD_WEBHOOK_URL }}
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Environment
+        uses: ./.github/actions/setup_py_env
+        with:
+          python-version: '3.11.8'
+      
+      - name: Run Discord Bot
+        run: poetry run python3 lib/discord_bot.py
