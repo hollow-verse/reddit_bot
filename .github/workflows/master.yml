@@ -5,20 +5,31 @@ on:
   schedule:
     - cron: "*/15 * * * *"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   setup-and-lint:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       
       - name: Set up Environment
+        id: setup
         uses: ./.github/actions/setup_py_env
         with:
           python-version: '3.11.8'
+      
+      - name: Run linting
+        run: poetry run flake8 lib/
+        continue-on-error: true
 
   run-bot:
     needs: setup-and-lint
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     env:
       MONGO_USER: ${{ vars.MONGO_USER }}
       SUB_NAMES: ${{ vars.SUB_NAMES }}
@@ -34,12 +45,14 @@ jobs:
       DISCORD_WEBHOOK_URL: ${{ vars.DISCORD_WEBHOOK_URL }}
     
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       
       - name: Set up Environment
+        id: setup
         uses: ./.github/actions/setup_py_env
         with:
           python-version: '3.11.8'
       
       - name: Run Discord Bot
         run: poetry run python3 lib/discord_bot.py
+        timeout-minutes: 10
