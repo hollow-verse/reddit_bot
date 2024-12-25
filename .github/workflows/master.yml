@@ -10,26 +10,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  setup-and-lint:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11.8'
-          
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        
-      - name: Install dependencies
-        run: poetry install
-        
-      - name: Run linting
-        run: poetry run flake8 lib/
-
   run-bot:
     needs: setup-and-lint
     runs-on: ubuntu-latest
