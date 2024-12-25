@@ -14,24 +14,28 @@ runs:
   steps:
     - name: Checkout repo
       uses: actions/checkout@v4
-    - name: Provide OS-level requirements
-      shell: bash
-      run: sudo apt-get update && sudo apt-get install -y ${{ inputs.system-requirements }}
+    
     - name: Setup python
       uses: actions/setup-python@v5
       with:
         python-version: ${{ inputs.python-version }}
         cache: 'poetry'
+    
     - name: Install poetry
+      uses: snok/install-poetry@v1
+      with:
+        version: 1.7.1
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+        installer-parallel: true
+
+    - name: Verify poetry installation
       shell: bash
       run: |
-        curl -sSL https://install.python-poetry.org | python3 -
-        echo "$HOME/.local/bin" >> $GITHUB_PATH
-    - name: Configure poetry
-      shell: bash
-      run: |
-        poetry config virtualenvs.create true
-        poetry config virtualenvs.in-project true
+        export PATH="$HOME/.local/bin:$PATH"
+        poetry --version
+        which poetry
+    
     - name: Load cached venv
       id: cached-poetry-dependencies
       uses: actions/cache@v3
@@ -42,8 +46,11 @@ runs:
         key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
         restore-keys: |
           venv-${{ runner.os }}-
+    
     - name: Install dependencies
-      if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
       shell: bash
+      if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
       run: |
+        export PATH="$HOME/.local/bin:$PATH"
+        poetry config virtualenvs.in-project true
         poetry install --no-interaction --no-root
