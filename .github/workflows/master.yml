@@ -1,4 +1,4 @@
-name: Extract Reddit Posts and Send to Telegram
+name: Extract Reddit Posts and Send to Discord
 
 on:
    workflow_dispatch:
@@ -33,5 +33,5 @@ jobs:
       - name: Linting check
         run: |
           echo "Sending messsages to Telegram...."
-          poetry run python3 lib/bot.py
+          poetry run python3 lib/discord_bot.py
   
