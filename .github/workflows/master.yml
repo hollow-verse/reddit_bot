@@ -16,10 +16,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Set up Environment
-        id: setup
-        uses: ./.github/actions/setup_py_env
-      
       - name: Run linting
         run: poetry run flake8 lib/
 
@@ -44,9 +40,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Set up Environment
-        id: setup
-        uses: ./.github/actions/setup_py_env
       
       - name: Run Discord Bot
         run: poetry run python3 lib/discord_bot.py
