@@ -4,12 +4,12 @@ from utils import get_all_posts
 import os
 
 def main():
-    VALID_FLIAR_TEXT = os.environ.get('TEST_ENV_VAR').split(',')
+    VALID_FLIAR_TEXT = 'Hiring,Hiring - Open,Task'.split(',')
     sub_names = os.getenv('SUB_NAMES', '[]').split(',')
     print(sub_names)
     print(VALID_FLIAR_TEXT)
     if 'Task' in VALID_FLIAR_TEXT:
-        print('test passed')
+        get_all_posts()
    
 
 if __name__ == "__main__":
