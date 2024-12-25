@@ -32,7 +32,7 @@ runs:
     - name: Verify poetry installation
       shell: bash
       run: |
-        export PATH="$HOME/.local/bin:$PATH"
+        export PATH="$HOME/.poetry/bin:$PATH"
         poetry --version
         which poetry
     
@@ -51,6 +51,6 @@ runs:
       shell: bash
       if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
       run: |
-        export PATH="$HOME/.local/bin:$PATH"
+        export PATH="$HOME/.poetry/bin:$PATH"
         poetry config virtualenvs.in-project true
         poetry install --no-interaction --no-root
