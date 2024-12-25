@@ -16,6 +16,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11.8'
+          
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        
+      - name: Install dependencies
+        run: poetry install
+        
       - name: Run linting
         run: poetry run flake8 lib/
 
@@ -40,7 +51,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11.8'
+          
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        
+      - name: Install dependencies
+        run: poetry install
       
       - name: Run Discord Bot
-        run: poetry run python3 lib/discord_bot.py
+        run: poetry run python lib/discord_bot.py
         timeout-minutes: 10
