@@ -19,12 +19,9 @@ jobs:
       - name: Set up Environment
         id: setup
         uses: ./.github/actions/setup_py_env
-        with:
-          python-version: '3.11.8'
       
       - name: Run linting
         run: poetry run flake8 lib/
-        continue-on-error: true
 
   run-bot:
     needs: setup-and-lint
@@ -50,8 +47,6 @@ jobs:
       - name: Set up Environment
         id: setup
         uses: ./.github/actions/setup_py_env
-        with:
-          python-version: '3.11.8'
       
       - name: Run Discord Bot
         run: poetry run python3 lib/discord_bot.py
