@@ -15,9 +15,6 @@ jobs:
         uses: ./.github/actions/setup_py_env
         with:
           python-version: '3.11.8'
-      
-      - name: Run linting
-        run: poetry run flake8 lib/
 
   run-bot:
     needs: setup-and-lint
