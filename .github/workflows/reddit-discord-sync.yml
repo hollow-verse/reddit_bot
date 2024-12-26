@@ -21,26 +21,26 @@ jobs:
         with:
           python-version: '3.11.8'
           cache: 'pip'
-          
-      - name: Load cached Poetry installation
-        uses: actions/cache@v3
-        with:
-          path: ~/.local
-          key: poetry-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
-          
+      
       - name: Install Poetry
         uses: snok/install-poetry@v1
-        
+        with:
+          version: latest
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          
       - name: Load cached dependencies
+        id: cached-poetry-dependencies
         uses: actions/cache@v3
         with:
           path: .venv
           key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            venv-${{ runner.os }}-
           
       - name: Install dependencies
-        run: |
-          poetry config virtualenvs.in-project true
-          poetry install
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction --no-root
 
   run-bot:
     needs: setup
@@ -76,4 +76,22 @@ jobs:
           key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
       
       - name: Run Discord Bot
-        run: poetry run python lib/discord_bot.py
+        id: run-bot
+        run: poetry run discord-bot
+        continue-on-error: true
+
+      - name: Notify on failure
+        if: steps.run-bot.outcome == 'failure'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { repo, owner } = context.repo;
+            const run_id = context.runId;
+            const run_url = `https://github.com/${owner}/${repo}/actions/runs/${run_id}`;
+            const message = `❌ Reddit Discord Bot failed!\nSee: ${run_url}`;
+            
+            if ('${{ secrets.DISCORD_WEBHOOK_URL }}') {
+              await github.request('POST ${{ secrets.DISCORD_WEBHOOK_URL }}', {
+                content: message
+              });
+            }
