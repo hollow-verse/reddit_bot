@@ -1,73 +1,111 @@
-# reddit_bot
-Telegram bot to scrape posts from reddit
+# Reddit Bot
+
+A bot that monitors Reddit posts and forwards them to both Discord and Telegram channels.
+
+## Features
+
+- Monitors configured subreddits for new posts
+- Filters posts by specific flairs
+- Forwards posts to Discord using webhooks
+- Forwards posts to Telegram using the Telegram Bot API 
+- Stores post history in MongoDB to prevent duplicates
+- Runs every 15 minutes via GitHub Actions
 
 ## Setup Instructions
 
-### Dependencies
-
-The project requires the following dependencies, which are specified in the `pyproject.toml` file:
+### Prerequisites
 
 - Python 3.11.8
-- discord-webhook ^1.3.0
-- praw ^7.7.1
-- pymongo ^4.7.0
-- python-telegram-bot ^21.1.1
-- pytz ^2024.1
+- Poetry for dependency management
+- MongoDB database
+- Discord webhook URL
+- Telegram bot token
+- Reddit API credentials
 
-### Environment Variables
+### Installation
 
-The following environment variables need to be set for the project to work correctly. These can be found in the `.test.env` file:
+1. Clone the repository
+2. Install dependencies using Poetry:
 
-- **Telegram Configuration**
-  - `TELEGRAM_TOKEN`
-  - `TELEGRAM_CHAT_ID`
+```bash
+poetry install
+```
 
-- **MongoDB Configuration**
-  - `MONGO_USER`
-  - `MONGO_PASSWORD`
-  - `MONGO_URI`
-  - `MONGO_DB_NAME`
+### Configuration
 
-- **Reddit Configuration**
-  - `REDDIT_CLIENT_ID`
-  - `REDDIT_CLIENT_SECRET`
-  - `REDDIT_PASSWORD`
-  - `REDDIT_USER_AGENT`
-  - `REDDIT_USERNAME`
+Create a `.env` file with the following environment variables:
 
-- **Discord Configuration**
-  - `DISCORD_WEBHOOK_URL`
+```env
+# Telegram Configuration
+TELEGRAM_TOKEN=your_telegram_bot_token
+TELEGRAM_CHAT_ID=your_telegram_chat_id
 
-- **Other Configuration**
-  - `VALID_FLAIRS`
-  - `SUB_NAMES`
+# MongoDB Configuration  
+MONGO_USER=your_mongodb_username
+MONGO_PASSWORD=your_mongodb_password
+MONGO_URI=your_mongodb_uri
+MONGO_DB_NAME=your_database_name
 
-## Usage Instructions
+# Reddit Configuration
+REDDIT_CLIENT_ID=your_reddit_client_id
+REDDIT_CLIENT_SECRET=your_reddit_client_secret
+REDDIT_USER_AGENT=your_user_agent
+
+# Discord Configuration
+DISCORD_WEBHOOK_URL=your_discord_webhook_url
+
+# Bot Configuration
+VALID_FLAIRS=comma,separated,flairs
+SUB_NAMES=comma,separated,subreddit_names
+```
 
 ### Running the Bot
 
-To run the Telegram bot, execute the following command:
-
+**Discord Bot:**
 ```bash
-poetry run python3 lib/bot.py
+poetry run python lib/discord_bot.py
 ```
 
-### Testing the Discord Integration
-
-To test the Discord integration, execute the following command:
-
+**Telegram Bot:**
 ```bash
-poetry run python3 lib/test_discord.py
+poetry run python lib/bot.py
 ```
 
-## CI/CD Setup
+### Testing
 
-The project uses GitHub Actions for CI/CD. The workflow file `.github/workflows/master.yml` and the custom action `.github/actions/setup_py_env/action.yml` are used for this setup.
+The project includes test files for different components:
 
-### Workflow File
+```bash
+# Test Discord integration
+poetry run python tests/test_discord.py
 
-The workflow file `.github/workflows/master.yml` is configured to extract Reddit posts and send them to Telegram. It runs on a schedule and uses the environment variables specified in the repository.
+# Test MongoDB connection
+poetry run python tests/test_mongo.py
 
-### Custom Action
+# Test core functionality
+poetry run python tests/test.py
+```
 
-The custom action `.github/actions/setup_py_env/action.yml` is used for dependency management. It checks cached dependencies and installs them through poetry if needed.
+## CI/CD
+
+The project uses GitHub Actions for automated deployment:
+
+- Runs every 15 minutes via cron schedule
+- Uses Poetry for dependency management
+- Caches dependencies for faster runs
+- Configurable through GitHub repository variables
+- Two identical workflows: `main.yml` and `master.yml`
+
+## Dependencies
+
+Managed through Poetry in `pyproject.toml`:
+
+- discord-webhook ^1.3.0 - Discord integration
+- praw ^7.7.1 - Reddit API wrapper
+- pymongo ^4.7.0 - MongoDB driver
+- python-telegram-bot ^21.1.1 - Telegram API wrapper
+- pytz ^2024.1 - Timezone handling
+
+## License
+
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.

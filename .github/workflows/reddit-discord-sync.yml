@@ -1,4 +1,4 @@
-name: Extract Reddit Posts and Send to Discord
+name: 🤖 Reddit to Discord Sync (15min)
 
 on:
   workflow_dispatch:
