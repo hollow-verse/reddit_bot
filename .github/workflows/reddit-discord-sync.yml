@@ -82,9 +82,9 @@ jobs:
           path: .venv
           key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
 
-      - name: Install project
+      - name: Install dependencies
         run: poetry install --no-interaction
       
       - name: Run Discord Bot
         id: run-bot
-        run: python3 lib/discord_bot.py
+        run: poetry run discord-bot
