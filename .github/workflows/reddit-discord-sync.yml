@@ -59,6 +59,7 @@ jobs:
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
       VALID_FLAIRS: ${{ secrets.VALID_FLAIRS }}
       DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      PAT_GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}
     
     steps:
       - uses: actions/checkout@v4
