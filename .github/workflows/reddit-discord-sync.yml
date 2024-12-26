@@ -86,9 +86,9 @@ jobs:
       - name: Install dependencies
         run: poetry install --no-interaction
 
-      - name: Sync Github Secrets
-        id: sync-secrets
-        run: poetry run sync-secrets
+      # - name: Sync Github Secrets
+      #   id: sync-secrets
+      #   run: poetry run sync-secrets
       
       - name: Run Discord Bot
         id: run-bot
