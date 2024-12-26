@@ -76,4 +76,4 @@ jobs:
           key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
       
       - name: Run Discord Bot
-        run: poetry run python lib/discord_bot.py
+        run: python3 lib/discord_bot.py
