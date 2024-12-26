@@ -1,0 +1,79 @@
+name: Extract Reddit Posts and Send to Discord
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/15 * * * *"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11.8'
+          cache: 'pip'
+          
+      - name: Load cached Poetry installation
+        uses: actions/cache@v3
+        with:
+          path: ~/.local
+          key: poetry-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+          
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        
+      - name: Load cached dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+          
+      - name: Install dependencies
+        run: |
+          poetry config virtualenvs.in-project true
+          poetry install
+
+  run-bot:
+    needs: setup
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      MONGO_USER: ${{ vars.MONGO_USER }}
+      SUB_NAMES: ${{ vars.SUB_NAMES }}
+      MONGO_PASSWORD: ${{ vars.MONGO_PASSWORD }}
+      MONGO_URI: ${{ vars.MONGO_URI }}
+      MONGO_DB_NAME: ${{ vars.MONGO_DB_NAME }}
+      REDDIT_CLIENT_ID: ${{ vars.REDDIT_CLIENT_ID }}
+      REDDIT_CLIENT_SECRET: ${{ vars.REDDIT_CLIENT_SECRET }}
+      REDDIT_USER_AGENT: ${{ vars.REDDIT_USER_AGENT }}
+      TELEGRAM_CHAT_ID: ${{ vars.TELEGRAM_CHAT_ID }}
+      TELEGRAM_TOKEN: ${{ vars.TELEGRAM_TOKEN }}
+      VALID_FLAIRS: ${{ vars.VALID_FLAIRS }}
+      DISCORD_WEBHOOK_URL: ${{ vars.DISCORD_WEBHOOK_URL }}
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11.8'
+          cache: 'pip'
+          
+      - name: Restore cached dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+      
+      - name: Run Discord Bot
+        run: poetry run python lib/discord_bot.py
