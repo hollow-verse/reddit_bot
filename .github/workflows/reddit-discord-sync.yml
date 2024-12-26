@@ -40,7 +40,7 @@ jobs:
           
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: poetry install --no-interaction --no-root
+        run: poetry install --no-interaction
 
   run-bot:
     needs: setup
@@ -69,11 +69,21 @@ jobs:
           python-version: '3.11.8'
           cache: 'pip'
           
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          
       - name: Restore cached dependencies
         uses: actions/cache@v3
         with:
           path: .venv
           key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install project
+        run: poetry install --no-interaction
       
       - name: Run Discord Bot
         id: run-bot
