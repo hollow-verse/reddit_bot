@@ -10,12 +10,15 @@ packages = [{include = "lib"}]
 python = "3.11.8"
 discord-webhook = "^1.3.0"
 praw = "^7.7.1"
+pygithub = "^2.5.0"
 pymongo = "^4.7.0"
+pynacl = "^1.5.0"
 python-telegram-bot = "^21.1.1"
 pytz = "^2024.1"
 
 [tool.poetry.scripts]
 discord-bot = "lib.discord_bot:main"
+sync-secrets = "lib.sync_github_secrets:main"
 
 [build-system]
 requires = ["poetry-core"]
