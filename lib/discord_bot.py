@@ -1,5 +1,5 @@
 from discord_webhook import DiscordWebhook, DiscordEmbed
-from utils import get_all_posts
+from .utils import get_all_posts  # Changed to relative import
 import os
 from typing import Dict, Any, List
 from logging import getLogger
