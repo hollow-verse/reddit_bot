@@ -40,7 +40,7 @@ jobs:
           
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: poetry install --no-interaction --no-root
+        run: poetry install --no-interaction
 
   run-bot:
     needs: setup
@@ -68,7 +68,7 @@ jobs:
         with:
           python-version: '3.11.8'
           cache: 'pip'
-      
+          
       - name: Install Poetry
         uses: snok/install-poetry@v1
         with:
@@ -81,24 +81,10 @@ jobs:
         with:
           path: .venv
           key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
-          
+
+      - name: Install project
+        run: poetry install --no-interaction
+      
       - name: Run Discord Bot
         id: run-bot
         run: poetry run discord-bot
-        continue-on-error: true
-
-      - name: Notify on failure
-        if: steps.run-bot.outcome == 'failure'
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const { repo, owner } = context.repo;
-            const run_id = context.runId;
-            const run_url = `https://github.com/${owner}/${repo}/actions/runs/${run_id}`;
-            const message = `❌ Reddit Discord Bot failed!\nSee: ${run_url}`;
-            
-            if ('${{ secrets.DISCORD_WEBHOOK_URL }}') {
-              await github.request('POST ${{ secrets.DISCORD_WEBHOOK_URL }}', {
-                content: message
-              });
-            }
