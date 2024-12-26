@@ -78,20 +78,3 @@ jobs:
       - name: Run Discord Bot
         id: run-bot
         run: poetry run discord-bot
-        continue-on-error: true
-
-      - name: Notify on failure
-        if: steps.run-bot.outcome == 'failure'
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const { repo, owner } = context.repo;
-            const run_id = context.runId;
-            const run_url = `https://github.com/${owner}/${repo}/actions/runs/${run_id}`;
-            const message = `❌ Reddit Discord Bot failed!\nSee: ${run_url}`;
-            
-            if ('${{ secrets.DISCORD_WEBHOOK_URL }}') {
-              await github.request('POST ${{ secrets.DISCORD_WEBHOOK_URL }}', {
-                content: message
-              });
-            }
