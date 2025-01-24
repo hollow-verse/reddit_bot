@@ -14,13 +14,16 @@ def encrypt_secret(public_key: str, secret_value: str) -> str:
 
 
 def create_or_update_secret(
-    repo, secret_name: str, secret_value: str,secret_type: str = "actions"
+    repo, secret_name: str = None, secret_value: str = None,secret_type: str = "actions"
 ):
     """Create or update a repository secret"""
 
     # Get repository's public key for secret encryption
     public_key = repo.get_public_key()
-    encrypted_value = encrypt_secret(public_key.key, secret_value)
+    # encrypted_value = encrypt_secret(public_key.key, secret_value)
+    secret_name='TEST_SECRET_VALUE'
+    encrypted_value='gAAAAABgJ9'
+    
 
     repo.create_secret(secret_name, encrypted_value, secret_type)
 
@@ -42,9 +45,11 @@ def main():
     # Get repository (replace with your repository details)
     repo_name = "hollow-verse/reddit_bot"
     repo = g.get_repo(repo_name)
+    create_or_update_secret(repo=repo, secret_type="actions")
+
     # delete_all_secrets(repo)
 
-    delete_all_secrets(repo)
+    # delete_all_secrets(repo)
     # Convert each variable into a secret
     # for variable in repo.get_variables():
     #     print(variable.name,variable.value)

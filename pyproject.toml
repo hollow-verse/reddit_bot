@@ -19,7 +19,7 @@ pytz = "^2024.1"
 [tool.poetry.scripts]
 discord-bot = "lib.discord_bot:main"
 sync-secrets = "lib.sync_github_secrets:main"
-test-secret-value = "tests:test_secret_value"
+test-secret-value = "tests.test_secret_value:main"
 
 [build-system]
 requires = ["poetry-core"]
