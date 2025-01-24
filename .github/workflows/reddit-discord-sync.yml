@@ -1,9 +1,9 @@
 name: 🤖 Reddit to Discord Sync (15min)
 
 on:
-  workflow_dispatch:
-  schedule:
-    - cron: "*/15 * * * *"
+  workflow_dispatch
+#   schedule:
+#     - cron: "*/15 * * * *"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
