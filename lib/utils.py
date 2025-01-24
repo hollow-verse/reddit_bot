@@ -2,6 +2,7 @@ import pytz
 from datetime import datetime as dt
 import pymongo
 import os
+import sys
 import praw
 
 def get_reddit_client():
@@ -107,4 +108,4 @@ def get_all_posts():
 
 
 if __name__ == "__main__":
-    filtered_post = get_all_posts()
+    filtered_post = get_all_posts()   
