@@ -25,6 +25,11 @@ def create_or_update_secret(
     repo.create_secret(secret_name, encrypted_value, secret_type)
 
 
+def delete_all_secrets(repo):
+    """Delete all repository secrets"""
+    for secret in repo.get_secrets():
+        repo.delete_secret(secret.name)
+
 
 def main():
     # Initialize GitHub client
@@ -35,12 +40,14 @@ def main():
     g = Github(github_token)
 
     # Get repository (replace with your repository details)
-    repo_name = "laraib-sidd/reddit_bot"
+    repo_name = "hollow-verse/reddit_bot"
     repo = g.get_repo(repo_name)
 
+    # delete_all_secrets(repo)
     # Convert each variable into a secret
     for variable in repo.get_variables():
-        create_or_update_secret(repo, variable.name, variable.value, "actions")
+        print(variable.name,variable.value)
+        # create_or_update_secret(repo, variable.name, variable.value, "actions")
 
 
 if __name__ == "__main__":

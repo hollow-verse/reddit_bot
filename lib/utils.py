@@ -68,7 +68,8 @@ def calculate_time_difference(utc_timestamp):
 
 
 def get_filtered_posts_with_praw(sub_name, reddit_client,mongo_client):
-    VALID_FLAIRS = os.getenv('VALID_FLAIRS', '[]').split(',')
+    # VALID_FLAIRS = os.getenv('VALID_FLAIRS', '[]').split(',')
+    VALID_FLAIRS = 'Hiring,Hiring - Open,Task'.split(',')
     subreddit_client = reddit_client.subreddit(sub_name)
     mongo_collection = mongo_client[sub_name]
     filtered_posts = []
