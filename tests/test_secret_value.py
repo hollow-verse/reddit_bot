@@ -20,8 +20,12 @@ def get_env_values():
         message += f"\n{category}:\n"
         for var in vars:
             value = os.getenv(var)
-            status = "✅ Found" if value else "❌ Missing"
-            message += f"{var}: {status}\n"
+            if value:
+                # Mask sensitive data by showing only first 4 chars
+                masked_value = value[:4] + '*' * (len(value) - 4) if len(value) > 4 else value
+                message += f"{var}: ✅ Value: {masked_value}\n"
+            else:
+                message += f"{var}: ❌ Missing\n"
     
     message += "```"
     return message
