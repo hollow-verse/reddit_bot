@@ -1,0 +1,95 @@
+name: 🤖 Reddit to Discord Sync (15min)
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/15 * * * *"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11.8'
+          cache: 'pip'
+      
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          
+      - name: Load cached dependencies
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            venv-${{ runner.os }}-
+          
+      - name: Install dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction
+
+  run-bot:
+    needs: setup
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      MONGO_USER: ${{ vars.MONGO_USER }}
+      SUB_NAMES: ${{ vars.SUB_NAMES }}
+      MONGO_PASSWORD: ${{ vars.MONGO_PASSWORD }}
+      MONGO_URI: ${{ vars.MONGO_URI }}
+      MONGO_DB_NAME: ${{ vars.MONGO_DB_NAME }}
+      REDDIT_CLIENT_ID: ${{ vars.REDDIT_CLIENT_ID }}
+      REDDIT_CLIENT_SECRET: ${{ vars.REDDIT_CLIENT_SECRET }}
+      REDDIT_USER_AGENT: ${{ vars.REDDIT_USER_AGENT }}
+      TELEGRAM_CHAT_ID: ${{ vars.TELEGRAM_CHAT_ID }}
+      TELEGRAM_TOKEN: ${{ vars.TELEGRAM_TOKEN }}
+      VALID_FLAIRS: ${{ vars.VALID_FLAIRS }}
+      DISCORD_WEBHOOK_URL: ${{ vars.DISCORD_WEBHOOK_URL }}
+      PAT_GITHUB_TOKEN: ${{ vars.PAT_GITHUB_TOKEN }}
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11.8'
+          cache: 'pip'
+          
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          
+      - name: Restore cached dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install dependencies
+        run: poetry install --no-interaction
+
+      # - name: Sync Github Secrets
+      #   id: sync-secrets
+      #   run: poetry run sync-secrets
+      
+      - name: Run Discord Bot
+        id: run-bot
+        run: poetry run discord-bot
