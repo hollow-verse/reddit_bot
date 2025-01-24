@@ -1,20 +1,44 @@
 import os
 import requests
 
-test_secret_value = os.getenv('TEST_SECRET_VALUE')
+ENV_VARS = {
+    'Telegram': ['TELEGRAM_TOKEN', 'TELEGRAM_CHAT_ID'],
+    'MongoDB': ['MONGO_USER', 'MONGO_PASSWORD', 'MONGO_URI', 'MONGO_DB_NAME'],
+    'Reddit': ['REDDIT_CLIENT_ID', 'REDDIT_CLIENT_SECRET', 'REDDIT_PASSWORD', 
+               'REDDIT_USER_AGENT', 'REDDIT_USERNAME'],
+    'Other': ['VALID_FLAIRS', 'SUB_NAMES'],
+    'Discord': ['DISCORD_WEBHOOK_URL'],
+    'GitHub': ['PAT_GITHUB_TOKEN']
+}
+
 WEBHOOK_URL = os.environ.get('DISCORD_WEBHOOK_URL')
 
-def main():
-    if test_secret_value:
-        print("Secret value exists")
-        try:
-            payload = {
-                "content": f"Secret value found: {test_secret_value}"
-            }
-            response = requests.post(WEBHOOK_URL, json=payload)
-            response.raise_for_status()
-        except requests.exceptions.RequestException as e:
-            print(f"Error sending to Discord: {e}")
+def get_env_values():
+    message = "🔍 Environment Variables Check:\n```\n"
+    
+    for category, vars in ENV_VARS.items():
+        message += f"\n{category}:\n"
+        for var in vars:
+            value = os.getenv(var)
+            status = "✅ Found" if value else "❌ Missing"
+            message += f"{var}: {status}\n"
+    
+    message += "```"
+    return message
 
-main()
+def main():
+    if not WEBHOOK_URL:
+        print("Discord webhook URL not found!")
+        return
+        
+    try:
+        message = get_env_values()
+        response = requests.post(WEBHOOK_URL, json={"content": message})
+        response.raise_for_status()
+        print("Environment variables status sent to Discord")
+    except requests.exceptions.RequestException as e:
+        print(f"Error sending to Discord: {e}")
+
+if __name__ == "__main__":
+    main()
 
