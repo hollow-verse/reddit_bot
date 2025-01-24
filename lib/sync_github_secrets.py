@@ -42,11 +42,12 @@ def main():
     # Get repository (replace with your repository details)
     repo_name = "hollow-verse/reddit_bot"
     repo = g.get_repo(repo_name)
-
     # delete_all_secrets(repo)
+
+    delete_all_secrets(repo)
     # Convert each variable into a secret
-    for variable in repo.get_variables():
-        print(variable.name,variable.value)
+    # for variable in repo.get_variables():
+    #     print(variable.name,variable.value)
         # create_or_update_secret(repo, variable.name, variable.value, "actions")
 
 
