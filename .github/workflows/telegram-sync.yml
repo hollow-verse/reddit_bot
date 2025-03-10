@@ -1,4 +1,4 @@
-name: 🤖 Reddit to Discord & Telegram Sync (15min)
+name: 🤖 Reddit to Telegram Sync (15min)
 
 on:
   workflow_dispatch:
@@ -42,24 +42,27 @@ jobs:
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction
 
-  run-bot:
+  run-telegram-bot:
     needs: setup
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
+      # MongoDB configuration
       MONGO_USER: ${{ secrets.MONGO_USER }}
-      SUB_NAMES: ${{ secrets.SUB_NAMES }}
       MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
       MONGO_URI: ${{ secrets.MONGO_URI }}
       MONGO_DB_NAME: ${{ secrets.MONGO_DB_NAME }}
+      
+      # Reddit configuration
       REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
       REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
       REDDIT_USER_AGENT: ${{ secrets.REDDIT_USER_AGENT }}
-      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+      SUB_NAMES: ${{ secrets.SUB_NAMES }}
       VALID_FLAIRS: ${{ secrets.VALID_FLAIRS }}
-      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-      PAT_GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}
+      
+      # Telegram configuration
+      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
     
     steps:
       - uses: actions/checkout@v4
@@ -86,10 +89,6 @@ jobs:
       - name: Install dependencies
         run: poetry install --no-interaction
       
-      - name: Run Discord Bot
-        id: run-discord-bot
-        run: poetry run discord-bot
-        
       - name: Run Telegram Bot
         id: run-telegram-bot
-        run: poetry run telegram-bot
+        run: poetry run telegram-bot 
