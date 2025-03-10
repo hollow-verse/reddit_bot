@@ -11,6 +11,33 @@ A bot that monitors Reddit posts and forwards them to both Discord and Telegram 
 - Stores post history in MongoDB to prevent duplicates
 - Runs every 15 minutes via GitHub Actions
 
+## Project Structure
+
+Well-organized structure for better maintainability:
+
+```
+reddit_bot/
+├── src/                   # Source code package
+│   ├── bots/              # Bot implementations
+│   │   ├── discord.py     # Discord bot
+│   │   └── telegram.py    # Telegram bot
+│   ├── services/          # External services
+│   │   ├── mongodb.py     # MongoDB service
+│   │   └── reddit.py      # Reddit API service
+│   └── utils/             # Utilities
+│       └── github.py      # GitHub utility functions
+├── scripts/               # Command-line scripts
+│   ├── discord_bot.py     # Discord bot runner
+│   ├── telegram_bot.py    # Telegram bot runner
+│   └── sync_secrets.py    # GitHub secrets utility
+├── pyproject.toml         # Poetry configuration
+├── .env                   # Environment variables
+├── .github/               # GitHub Actions workflows
+│   └── workflows/
+│       └── reddit-discord-sync.yml
+└── README.md              # Documentation
+```
+
 ## Setup Instructions
 
 ### Prerequisites
@@ -61,29 +88,15 @@ SUB_NAMES=comma,separated,subreddit_names
 
 ### Running the Bot
 
-**Discord Bot:**
 ```bash
-poetry run python lib/discord_bot.py
-```
+# Run Discord bot
+poetry run discord-bot
 
-**Telegram Bot:**
-```bash
-poetry run python lib/bot.py
-```
+# Run Telegram bot
+poetry run telegram-bot
 
-### Testing
-
-The project includes test files for different components:
-
-```bash
-# Test Discord integration
-poetry run python tests/test_discord.py
-
-# Test MongoDB connection
-poetry run python tests/test_mongo.py
-
-# Test core functionality
-poetry run python tests/test.py
+# Sync GitHub secrets
+poetry run sync-secrets
 ```
 
 ## CI/CD
@@ -93,17 +106,16 @@ The project uses GitHub Actions for automated deployment:
 - Runs every 15 minutes via cron schedule
 - Uses Poetry for dependency management
 - Caches dependencies for faster runs
-- Configurable through GitHub repository variables
-- Two identical workflows: `main.yml` and `master.yml`
+- Configurable through GitHub repository secrets
+- Automatically sends posts to both Discord and Telegram
 
 ## Dependencies
-
-Managed through Poetry in `pyproject.toml`:
 
 - discord-webhook ^1.3.0 - Discord integration
 - praw ^7.7.1 - Reddit API wrapper
 - pymongo ^4.7.0 - MongoDB driver
 - python-telegram-bot ^21.1.1 - Telegram API wrapper
+- python-dotenv ^1.0.1 - Environment variable management
 - pytz ^2024.1 - Timezone handling
 
 ## License

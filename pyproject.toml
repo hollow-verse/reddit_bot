@@ -1,10 +1,10 @@
 [tool.poetry]
 name = "reddit-bot"
 version = "0.1.0"
-description = ""
+description = "A bot that monitors Reddit posts and forwards them to Discord and Telegram"
 authors = ["laraib_sidd <laraib.sidd7@gmail.com>"]
 readme = "README.md"
-packages = [{include = "lib"}]
+packages = [{include = "src"}]
 
 [tool.poetry.dependencies]
 python = "3.11.8"
@@ -15,11 +15,15 @@ pymongo = "^4.7.0"
 pynacl = "^1.5.0"
 python-telegram-bot = "^21.1.1"
 pytz = "^2024.1"
+python-dotenv = "^1.0.1"
 
 [tool.poetry.scripts]
-discord-bot = "lib.discord_bot:main"
-sync-secrets = "lib.sync_github_secrets:main"
+telegram-bot = "scripts.telegram_bot:main"
+discord-bot = "scripts.discord_bot:main"
+sync-secrets = "scripts.sync_secrets:main"
 test-secret-value = "tests.test_secret_value:main"
+run-tests = "scripts.run_tests:main"
+live-test = "scripts.live_test:run_main"
 
 [build-system]
 requires = ["poetry-core"]
